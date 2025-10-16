@@ -1,0 +1,225 @@
+/* Superhero Theme Colors */
+:root {
+    --primary-color: #e53935; /* Red (Marvel) */
+    --secondary-color: #1976d2; /* Blue (DC) */
+    --accent-color: #ffd600; /* Yellow (Hero accent) */
+    --background-color: #181818; /* Dark background */
+    --card-bg: #23272a;
+    --text-primary: #fff;
+    --text-secondary: #b0bec5;
+    --danger: #e74c3c;
+}
+
+/* Estilos generales */
+body {
+    background: linear-gradient(135deg, #23272a 0%, #181818 100%);
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    color: var(--text-primary);
+    margin: 0;
+    min-height: 100vh;
+}
+
+h1.text-center {
+    color: var(--accent-color);
+    font-size: 2.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 2rem 0 1.5rem 0;
+    text-shadow: 2px 2px 8px #e53935, 0 0 10px #1976d2;
+}
+
+.input-group {
+    max-width: 500px;
+    margin: 2rem auto 2.5rem auto;
+}
+
+.input-group input {
+    border-radius: 25px 0 0 25px;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--accent-color);
+    background: #23272a;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.input-group input:focus {
+    box-shadow: 0 0 0 0.2rem #ffd60055;
+    border-color: var(--primary-color);
+}
+
+.input-group .btn-primary {
+    border-radius: 0 25px 25px 0;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: background 0.3s;
+}
+
+.input-group .btn-primary:hover {
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+}
+
+.card {
+    background: var(--card-bg);
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 #000a;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.7s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-title {
+    color: var(--accent-color);
+    font-size: 2.2rem;
+    font-weight: 800;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.2rem;
+    text-shadow: 1px 1px 6px #e53935;
+}
+
+.img-fluid {
+    border-radius: 18px 0 0 18px;
+    max-height: 350px;
+    width: 100%;
+    object-fit: contain;
+    background: #181818;
+    box-shadow: 0 5px 15px #000a;
+    display: block;
+    margin: 0 auto;
+}
+
+.card-body {
+    padding: 2rem 2rem 1rem 2rem;
+}
+
+.card-text {
+    color: var(--text-secondary);
+    margin-bottom: 0.7rem;
+    font-size: 1.08rem;
+}
+
+.card-text strong {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+h5 {
+    color: var(--secondary-color);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 1.2rem;
+    margin-bottom: 0.7rem;
+    border-bottom: 1px solid #ffd60033;
+    padding-bottom: 0.3rem;
+}
+
+/* Power Stats */
+.row {
+    margin-bottom: 1rem;
+}
+
+.row .col-md-6 {
+    padding: 0.5rem 0.7rem;
+    margin-bottom: 0.5rem;
+    background: #222b;
+    border-radius: 8px;
+    color: var(--accent-color);
+    font-weight: 700;
+    font-size: 1.05rem;
+    box-shadow: 0 2px 8px #0002;
+}
+
+.d-flex.justify-content-between {
+    background: var(--card-bg);
+    padding: 1.2rem;
+    border-radius: 18px;
+    box-shadow: 0 5px 15px #000a;
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 25px;
+    padding: 0.7rem 2rem;
+    font-size: 1.1rem;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    transform: translateY(-2px);
+}
+
+.alert {
+    border-radius: 15px;
+    border: none;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px #000a;
+    animation: fadeIn 0.6s;
+}
+
+.alert-danger {
+    background: linear-gradient(90deg, var(--danger), #c0392b);
+    color: #fff;
+    font-weight: 700;
+}
+
+.alert .btn-secondary {
+    background: #ffd600;
+    border: none;
+    color: #23272a;
+    font-weight: 700;
+    border-radius: 18px;
+    transition: background 0.3s;
+}
+
+.alert .btn-secondary:hover {
+    background: #fff;
+    color: #e53935;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .img-fluid {
+        border-radius: 18px 18px 0 0;
+        max-height: 250px;
+    }
+    
+    .card-body {
+        padding: 1.2rem;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .btn-primary {
+        width: 100%;
+    }
+}

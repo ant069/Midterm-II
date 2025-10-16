@@ -12,6 +12,27 @@ app.use(express.urlencoded({ extended: true }));
 
 const API_BASE = 'https://akabab.github.io/superhero-api/api';
 const TOTAL_HEROES = 731;
+let allHeroes = null;
+let heroesById = null;
+
+// Cache all heroes data
+async function loadAllHeroes() {
+  if (!allHeroes) {
+    try {
+      console.log('Fetching all heroes...');
+      const response = await axios.get(`${API_BASE}/all.json`);
+      allHeroes = response.data;
+      // Create an index of heroes by ID
+      heroesById = new Map(allHeroes.map(hero => [hero.id, hero]));
+      console.log(`Loaded ${allHeroes.length} heroes`);
+    } catch (error) {
+      console.error('Error loading all heroes:', error);
+      allHeroes = [];
+      heroesById = new Map();
+    }
+  }
+  return allHeroes;
+}
 
 app.get('/', async (req, res) => {
   try {
@@ -34,22 +55,49 @@ app.get('/', async (req, res) => {
 
 app.get('/hero/:id', async (req, res) => {
   try {
+    await loadAllHeroes(); // Ensure heroes are loaded
+    
     let id = parseInt(req.params.id);
+    let validIds = Array.from(heroesById.keys()).sort((a, b) => a - b);
     
-    if (id < 1) id = TOTAL_HEROES;
-    if (id > TOTAL_HEROES) id = 1;
+    // Find the current index in our valid IDs array
+    let currentIndex = validIds.indexOf(id);
+    if (currentIndex === -1) {
+      // If ID not found, default to first hero
+      id = validIds[0];
+      currentIndex = 0;
+    }
     
-    const response = await axios.get(`${API_BASE}/id/${id}.json`);
-    res.render('index', { 
-      hero: response.data, 
-      currentId: id, 
-      totalHeroes: TOTAL_HEROES,
-      error: null 
-    });
+    // Handle previous/next navigation
+    if (req.query.direction === 'prev') {
+      currentIndex = currentIndex <= 0 ? validIds.length - 1 : currentIndex - 1;
+    } else if (req.query.direction === 'next') {
+      currentIndex = currentIndex >= validIds.length - 1 ? 0 : currentIndex + 1;
+    }
+    
+    id = validIds[currentIndex];
+    const hero = heroesById.get(id);
+    
+    if (hero) {
+      res.render('index', { 
+        hero, 
+        currentId: id, 
+        totalHeroes: validIds.length,
+        error: null 
+      });
+    } else {
+      res.render('index', { 
+        hero: null, 
+        currentId: validIds[0], 
+        totalHeroes: validIds.length,
+        error: `Error loading hero data` 
+      });
+    }
   } catch (error) {
+    console.error('Error loading hero:', error);
     res.render('index', { 
       hero: null, 
-      currentId: 1, 
+      currentId: id || 1, 
       totalHeroes: TOTAL_HEROES,
       error: 'Error loading hero' 
     });
@@ -58,12 +106,12 @@ app.get('/hero/:id', async (req, res) => {
 
 app.post('/search', async (req, res) => {
   try {
-    const searchName = req.body.searchName;
-    const response = await axios.get(`${API_BASE}/all.json`);
-    const heroes = response.data;
+    const searchName = req.body.searchName.toLowerCase();
+    const heroes = await loadAllHeroes();
     
     const found = heroes.find(hero => 
-      hero.name.toLowerCase().includes(searchName.toLowerCase())
+      hero.name.toLowerCase().includes(searchName) ||
+      (hero.biography.fullName && hero.biography.fullName.toLowerCase().includes(searchName))
     );
     
     if (found) {
@@ -78,7 +126,7 @@ app.post('/search', async (req, res) => {
         hero: null, 
         currentId: 1, 
         totalHeroes: TOTAL_HEROES,
-        error: `No hero found with name "${searchName}"` 
+        error: `No hero found with name "${req.body.searchName}"` 
       });
     }
   } catch (error) {

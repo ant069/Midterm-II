@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superhero-pedia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Superhero-pedia</h1>
+        
+
+        <form action="/search" method="POST" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="searchName" class="form-control" placeholder="Search superhero by name..." required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+   
+        <% if (error) { %>
+            <div class="alert alert-danger">
+                <%= error %>
+                <div class="mt-2">
+                    <a href="/" class="btn btn-secondary">Back to Start</a>
+                </div>
+            </div>
+        <% } %>
+
+
+        <% if (hero && !error) { %>
+            <div class="card">
+                <div class="row g-0">
+              
+                    <div class="col-md-4">
+                        <img src="<%= hero.images.md || hero.images.sm || '/images/default-hero.jpg' %>" 
+                             class="img-fluid rounded-start" 
+                             alt="<%= hero.name %>"
+                             onerror="this.src='/images/default-hero.jpg'">
+                    </div>
+                    
+                  
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h2 class="card-title"><%= hero.name %></h2>
+                            <p class="card-text"><strong>ID:</strong> <%= hero.id %></p>
+                            <p class="card-text"><strong>Full Name:</strong> <%= hero.biography.fullName || 'Unknown' %></p>
+                            <p class="card-text"><strong>Place of Birth:</strong> <%= hero.biography.placeOfBirth || 'Unknown' %></p>
+                            <p class="card-text"><strong>Gender:</strong> <%= hero.appearance.gender || 'Unknown' %></p>
+                            <p class="card-text"><strong>Race:</strong> <%= hero.appearance.race || 'Unknown' %></p>
+                            <p class="card-text"><strong>Height:</strong> <%= hero.appearance.height.join(' / ') || 'Unknown' %></p>
+                            <p class="card-text"><strong>Weight:</strong> <%= hero.appearance.weight.join(' / ') || 'Unknown' %></p>
+                            <p class="card-text"><strong>Eye Color:</strong> <%= hero.appearance.eyeColor || 'Unknown' %></p>
+                            <p class="card-text"><strong>Hair Color:</strong> <%= hero.appearance.hairColor || 'Unknown' %></p>
+                            
+                            
+                            <h5>Power Stats</h5>
+                            <div class="row">
+                                <% for (const [stat, value] of Object.entries(hero.powerstats)) { %>
+                                    <div class="col-md-6">
+                                        <strong><%= stat %>:</strong> <%= value || '0' %>
+                                    </div>
+                                <% } %>
+                            </div>
+                            
+                           
+                            <h5 class="mt-3">Biography</h5>
+                            <p class="card-text"><%= hero.biography.fullName || 'No biography available' %></p>
+                            
+
+                            <% if (hero.biography.aliases && hero.biography.aliases.length > 0) { %>
+                                <h5>Aliases</h5>
+                                <p class="card-text"><%= hero.biography.aliases.join(', ') %></p>
+                            <% } %>
+                            
+
+                            <h5>Group Affiliation</h5>
+                            <p class="card-text"><%= hero.connections.groupAffiliation || 'None' %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/hero/<%= currentId - 1 %>" class="btn btn-primary">Previous</a>
+                <span class="align-self-center">Hero <%= currentId %> of <%= totalHeroes %></span>
+                <a href="/hero/<%= currentId + 1 %>" class="btn btn-primary">Next</a>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

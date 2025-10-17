@@ -3,7 +3,7 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -15,14 +15,12 @@ const TOTAL_HEROES = 731;
 let allHeroes = null;
 let heroesById = null;
 
-// Cache all heroes data
 async function loadAllHeroes() {
   if (!allHeroes) {
     try {
       console.log('Fetching all heroes...');
       const response = await axios.get(`${API_BASE}/all.json`);
       allHeroes = response.data;
-      // Create an index of heroes by ID
       heroesById = new Map(allHeroes.map(hero => [hero.id, hero]));
       console.log(`Loaded ${allHeroes.length} heroes`);
     } catch (error) {
@@ -55,20 +53,17 @@ app.get('/', async (req, res) => {
 
 app.get('/hero/:id', async (req, res) => {
   try {
-    await loadAllHeroes(); // Ensure heroes are loaded
+    await loadAllHeroes();
     
     let id = parseInt(req.params.id);
     let validIds = Array.from(heroesById.keys()).sort((a, b) => a - b);
     
-    // Find the current index in our valid IDs array
     let currentIndex = validIds.indexOf(id);
     if (currentIndex === -1) {
-      // If ID not found, default to first hero
       id = validIds[0];
       currentIndex = 0;
     }
     
-    // Handle previous/next navigation
     if (req.query.direction === 'prev') {
       currentIndex = currentIndex <= 0 ? validIds.length - 1 : currentIndex - 1;
     } else if (req.query.direction === 'next') {
@@ -90,14 +85,14 @@ app.get('/hero/:id', async (req, res) => {
         hero: null, 
         currentId: validIds[0], 
         totalHeroes: validIds.length,
-        error: `Error loading hero data` 
+        error: 'Error loading hero data'
       });
     }
   } catch (error) {
     console.error('Error loading hero:', error);
     res.render('index', { 
       hero: null, 
-      currentId: id || 1, 
+      currentId: 1, 
       totalHeroes: TOTAL_HEROES,
       error: 'Error loading hero' 
     });
@@ -140,5 +135,5 @@ app.post('/search', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -11,7 +11,6 @@
     <div class="container mt-4">
         <h1 class="text-center mb-4">Superhero-pedia</h1>
         
-
         <form action="/search" method="POST" class="mb-4">
             <div class="input-group">
                 <input type="text" name="searchName" class="form-control" placeholder="Search superhero by name..." required>
@@ -19,7 +18,6 @@
             </div>
         </form>
 
-   
         <% if (error) { %>
             <div class="alert alert-danger">
                 <%= error %>
@@ -29,32 +27,21 @@
             </div>
         <% } %>
 
-
         <% if (hero && !error) { %>
             <div class="card">
                 <div class="row g-0">
-              
-                    <div class="col-md-4">
-                        <img src="<%= hero.images.md || hero.images.sm || '/images/default-hero.jpg' %>" 
-                             class="img-fluid rounded-start" 
+                    <div class="col-md-4 d-flex align-items-center justify-content-center p-3" style="background: linear-gradient(135deg, #23272a 0%, #181818 100%);">
+                        <img src="<%= hero.images.lg || hero.images.md || '/images/default-hero.jpg' %>" 
+                             class="hero-image" 
                              alt="<%= hero.name %>"
                              onerror="this.src='/images/default-hero.jpg'">
                     </div>
                     
-                  
                     <div class="col-md-8">
                         <div class="card-body">
                             <h2 class="card-title"><%= hero.name %></h2>
                             <p class="card-text"><strong>ID:</strong> <%= hero.id %></p>
                             <p class="card-text"><strong>Full Name:</strong> <%= hero.biography.fullName || 'Unknown' %></p>
-                            <p class="card-text"><strong>Place of Birth:</strong> <%= hero.biography.placeOfBirth || 'Unknown' %></p>
-                            <p class="card-text"><strong>Gender:</strong> <%= hero.appearance.gender || 'Unknown' %></p>
-                            <p class="card-text"><strong>Race:</strong> <%= hero.appearance.race || 'Unknown' %></p>
-                            <p class="card-text"><strong>Height:</strong> <%= hero.appearance.height.join(' / ') || 'Unknown' %></p>
-                            <p class="card-text"><strong>Weight:</strong> <%= hero.appearance.weight.join(' / ') || 'Unknown' %></p>
-                            <p class="card-text"><strong>Eye Color:</strong> <%= hero.appearance.eyeColor || 'Unknown' %></p>
-                            <p class="card-text"><strong>Hair Color:</strong> <%= hero.appearance.hairColor || 'Unknown' %></p>
-                            
                             
                             <h5>Power Stats</h5>
                             <div class="row">
@@ -65,18 +52,35 @@
                                 <% } %>
                             </div>
                             
-                           
                             <h5 class="mt-3">Biography</h5>
-                            <p class="card-text"><%= hero.biography.fullName || 'No biography available' %></p>
-                            
-
-                            <% if (hero.biography.aliases && hero.biography.aliases.length > 0) { %>
-                                <h5>Aliases</h5>
-                                <p class="card-text"><%= hero.biography.aliases.join(', ') %></p>
+                            <p class="card-text"><strong>Place of Birth:</strong> <%= hero.biography.placeOfBirth || 'Unknown' %></p>
+                            <% if (hero.biography.firstAppearance && hero.biography.firstAppearance !== '-') { %>
+                                <p class="card-text"><strong>First Appearance:</strong> <%= hero.biography.firstAppearance %></p>
+                            <% } %>
+                            <% if (hero.biography.publisher && hero.biography.publisher !== '-') { %>
+                                <p class="card-text"><strong>Publisher:</strong> <%= hero.biography.publisher %></p>
+                            <% } %>
+                            <% if (hero.biography.alignment && hero.biography.alignment !== '-') { %>
+                                <p class="card-text"><strong>Alignment:</strong> <%= hero.biography.alignment %></p>
+                            <% } %>
+                            <% if (hero.work && hero.work.occupation && hero.work.occupation !== '-') { %>
+                                <p class="card-text"><strong>Occupation:</strong> <%= hero.work.occupation %></p>
                             <% } %>
                             
-
-                            <h5>Group Affiliation</h5>
+                            <% if (hero.biography.aliases && hero.biography.aliases.length > 0 && hero.biography.aliases[0] !== '-') { %>
+                                <h5 class="mt-3">Aliases</h5>
+                                <p class="card-text"><%= hero.biography.aliases.filter(a => a !== '-').join(', ') %></p>
+                            <% } %>
+                            
+                            <h5 class="mt-3">Appearance</h5>
+                            <p class="card-text"><strong>Gender:</strong> <%= hero.appearance.gender || 'Unknown' %></p>
+                            <p class="card-text"><strong>Race:</strong> <%= hero.appearance.race || 'Unknown' %></p>
+                            <p class="card-text"><strong>Height:</strong> <%= hero.appearance.height.join(' / ') || 'Unknown' %></p>
+                            <p class="card-text"><strong>Weight:</strong> <%= hero.appearance.weight.join(' / ') || 'Unknown' %></p>
+                            <p class="card-text"><strong>Eye Color:</strong> <%= hero.appearance.eyeColor || 'Unknown' %></p>
+                            <p class="card-text"><strong>Hair Color:</strong> <%= hero.appearance.hairColor || 'Unknown' %></p>
+                            
+                            <h5 class="mt-3">Group Affiliation</h5>
                             <p class="card-text"><%= hero.connections.groupAffiliation || 'None' %></p>
                         </div>
                     </div>

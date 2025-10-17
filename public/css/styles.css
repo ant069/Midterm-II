@@ -1,16 +1,14 @@
-/* Superhero Theme Colors */
 :root {
-    --primary-color: #e53935; /* Red (Marvel) */
-    --secondary-color: #1976d2; /* Blue (DC) */
-    --accent-color: #ffd600; /* Yellow (Hero accent) */
-    --background-color: #181818; /* Dark background */
+    --primary-color: #e53935;
+    --secondary-color: #1976d2;
+    --accent-color: #ffd600;
+    --background-color: #181818;
     --card-bg: #23272a;
     --text-primary: #fff;
     --text-secondary: #b0bec5;
     --danger: #e74c3c;
 }
 
-/* Estilos generales */
 body {
     background: linear-gradient(135deg, #23272a 0%, #181818 100%);
     font-family: 'Segoe UI', 'Arial', sans-serif;
@@ -71,6 +69,7 @@ h1.text-center {
     overflow: hidden;
     margin-bottom: 2rem;
     animation: fadeIn 0.7s;
+    transition: transform 0.3s ease;
 }
 
 .card:hover {
@@ -87,15 +86,25 @@ h1.text-center {
     text-shadow: 1px 1px 6px #e53935;
 }
 
-.img-fluid {
-    border-radius: 18px 0 0 18px;
-    max-height: 350px;
+.hero-image {
     width: 100%;
+    max-width: 350px;
+    height: auto;
+    max-height: 500px;
     object-fit: contain;
-    background: #181818;
-    box-shadow: 0 5px 15px #000a;
-    display: block;
-    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(255, 214, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: linear-gradient(135deg, #181818 0%, #23272a 100%);
+    padding: 10px;
+}
+
+.hero-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7),
+                0 0 30px rgba(255, 214, 0, 0.5),
+                0 0 50px rgba(229, 57, 53, 0.3);
 }
 
 .card-body {
@@ -123,7 +132,6 @@ h5 {
     padding-bottom: 0.3rem;
 }
 
-/* Power Stats */
 .row {
     margin-bottom: 1rem;
 }
@@ -155,12 +163,13 @@ h5 {
     border-radius: 25px;
     padding: 0.7rem 2rem;
     font-size: 1.1rem;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
     background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
     transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(229, 57, 53, 0.4);
 }
 
 .alert {
@@ -204,9 +213,10 @@ h5 {
 }
 
 @media (max-width: 768px) {
-    .img-fluid {
-        border-radius: 18px 18px 0 0;
-        max-height: 250px;
+    .hero-image {
+        max-width: 280px;
+        max-height: 400px;
+        margin: 1rem auto;
     }
     
     .card-body {
@@ -221,5 +231,9 @@ h5 {
     
     .btn-primary {
         width: 100%;
+    }
+    
+    h1.text-center {
+        font-size: 2rem;
     }
 }

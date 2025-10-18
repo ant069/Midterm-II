@@ -13,6 +13,9 @@
         
         <form action="/search" method="POST" class="mb-4">
             <div class="input-group">
+                <span class="input-group-text search-icon">
+                    🔍
+                </span>
                 <input type="text" name="searchName" class="form-control" placeholder="Search superhero by name..." required>
                 <button type="submit" class="btn btn-primary">Search</button>
             </div>
@@ -30,7 +33,7 @@
         <% if (hero && !error) { %>
             <div class="card">
                 <div class="row g-0">
-                    <div class="col-md-4 d-flex align-items-center justify-content-center p-3" style="background: linear-gradient(135deg, #23272a 0%, #181818 100%);">
+                    <div class="col-md-4 d-flex align-items-center justify-content-center p-3 hero-image-container">
                         <img src="<%= hero.images.lg || hero.images.md || '/images/default-hero.jpg' %>" 
                              class="hero-image" 
                              alt="<%= hero.name %>"
@@ -43,16 +46,28 @@
                             <p class="card-text"><strong>ID:</strong> <%= hero.id %></p>
                             <p class="card-text"><strong>Full Name:</strong> <%= hero.biography.fullName || 'Unknown' %></p>
                             
-                            <h5>Power Stats</h5>
-                            <div class="row">
+                            <h5>⚡ Power Stats</h5>
+                            <div class="row g-3 mb-3">
                                 <% for (const [stat, value] of Object.entries(hero.powerstats)) { %>
                                     <div class="col-md-6">
-                                        <strong><%= stat %>:</strong> <%= value || '0' %>
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="text-capitalize fw-bold stat-label"><%= stat %></span>
+                                            <span class="badge bg-warning text-dark"><%= value || '0' %></span>
+                                        </div>
+                                        <div class="progress power-progress">
+                                            <div class="progress-bar power-bar" 
+                                                 role="progressbar" 
+                                                 style="width: <%= value %>%;"
+                                                 aria-valuenow="<%= value %>" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="100">
+                                            </div>
+                                        </div>
                                     </div>
                                 <% } %>
                             </div>
                             
-                            <h5 class="mt-3">Biography</h5>
+                            <h5>📖 Biography</h5>
                             <p class="card-text"><strong>Place of Birth:</strong> <%= hero.biography.placeOfBirth || 'Unknown' %></p>
                             <% if (hero.biography.firstAppearance && hero.biography.firstAppearance !== '-') { %>
                                 <p class="card-text"><strong>First Appearance:</strong> <%= hero.biography.firstAppearance %></p>
@@ -61,36 +76,65 @@
                                 <p class="card-text"><strong>Publisher:</strong> <%= hero.biography.publisher %></p>
                             <% } %>
                             <% if (hero.biography.alignment && hero.biography.alignment !== '-') { %>
-                                <p class="card-text"><strong>Alignment:</strong> <%= hero.biography.alignment %></p>
+                                <p class="card-text">
+                                    <strong>Alignment:</strong> 
+                                    <span class="badge <%= hero.biography.alignment === 'good' ? 'bg-success' : hero.biography.alignment === 'bad' ? 'bg-danger' : 'bg-secondary' %>">
+                                        <%= hero.biography.alignment %>
+                                    </span>
+                                </p>
                             <% } %>
                             <% if (hero.work && hero.work.occupation && hero.work.occupation !== '-') { %>
                                 <p class="card-text"><strong>Occupation:</strong> <%= hero.work.occupation %></p>
                             <% } %>
                             
                             <% if (hero.biography.aliases && hero.biography.aliases.length > 0 && hero.biography.aliases[0] !== '-') { %>
-                                <h5 class="mt-3">Aliases</h5>
-                                <p class="card-text"><%= hero.biography.aliases.filter(a => a !== '-').join(', ') %></p>
+                                <h5>🎭 Aliases</h5>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <% hero.biography.aliases.filter(a => a !== '-').forEach(alias => { %>
+                                        <span class="badge alias-badge"><%= alias %></span>
+                                    <% }) %>
+                                </div>
                             <% } %>
                             
-                            <h5 class="mt-3">Appearance</h5>
-                            <p class="card-text"><strong>Gender:</strong> <%= hero.appearance.gender || 'Unknown' %></p>
-                            <p class="card-text"><strong>Race:</strong> <%= hero.appearance.race || 'Unknown' %></p>
-                            <p class="card-text"><strong>Height:</strong> <%= hero.appearance.height.join(' / ') || 'Unknown' %></p>
-                            <p class="card-text"><strong>Weight:</strong> <%= hero.appearance.weight.join(' / ') || 'Unknown' %></p>
-                            <p class="card-text"><strong>Eye Color:</strong> <%= hero.appearance.eyeColor || 'Unknown' %></p>
-                            <p class="card-text"><strong>Hair Color:</strong> <%= hero.appearance.hairColor || 'Unknown' %></p>
+                            <h5>👤 Appearance</h5>
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-6">
+                                    <p class="card-text mb-1"><strong>Gender:</strong> <%= hero.appearance.gender || 'Unknown' %></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-1"><strong>Race:</strong> <%= hero.appearance.race || 'Unknown' %></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-1"><strong>Height:</strong> <%= hero.appearance.height.join(' / ') || 'Unknown' %></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-1"><strong>Weight:</strong> <%= hero.appearance.weight.join(' / ') || 'Unknown' %></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-1"><strong>Eye Color:</strong> <%= hero.appearance.eyeColor || 'Unknown' %></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="card-text mb-1"><strong>Hair Color:</strong> <%= hero.appearance.hairColor || 'Unknown' %></p>
+                                </div>
+                            </div>
                             
-                            <h5 class="mt-3">Group Affiliation</h5>
+                            <h5>👥 Group Affiliation</h5>
                             <p class="card-text"><%= hero.connections.groupAffiliation || 'None' %></p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between mt-4">
-                <a href="/hero/<%= currentId %>?direction=prev" class="btn btn-primary">Previous</a>
-                <span class="align-self-center">Hero <%= currentId %> of <%= totalHeroes %></span>
-                <a href="/hero/<%= currentId %>?direction=next" class="btn btn-primary">Next</a>
+            <div class="navigation-footer">
+                <a href="/hero/<%= currentId %>?direction=prev" class="btn btn-primary">
+                    ← Previous
+                </a>
+                <span class="counter-badge">
+                    Hero <%= currentId %> of <%= totalHeroes %>
+                </span>
+                <a href="/hero/<%= currentId %>?direction=next" class="btn btn-primary">
+                    Next →
+                </a>
             </div>
         <% } %>
     </div>
